@@ -1,0 +1,22 @@
+library(data.table)
+
+setwd("/Users/dimitrismathios/Desktop/sp/specdata")
+getwd()
+list.files()
+directory<-"/Users/dimitrismathios/Desktop/sp/specdata"
+
+complete <- function(directory,  id = 1:332) {
+  
+  all_files <- as.character( list.files(directory) )
+  file_paths <- paste(directory,"/", all_files, sep="")
+  
+  
+  lst <- lapply(file_paths, data.table::fread)
+  dt <- rbindlist(lst)
+  
+  return(dt[complete.cases(dt), .(nobs = .N), by = ID])
+  
+}
+
+#Example usage
+complete(directory, id = 20:30)
